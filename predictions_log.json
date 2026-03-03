@@ -1,0 +1,77 @@
+[
+  {
+    "type": "loan",
+    "inputs": {
+      "cibil_score": 760,
+      "income": 500000.0,
+      "loan_amount": 10000.0,
+      "education": "Graduate",
+      "self_employed": "No",
+      "loan_term": 2,
+      "dependents": 0
+    },
+    "prediction": "Rejected",
+    "confidence": 65.2,
+    "reasons": [
+      "Your CIBIL score was marked down by -3.60, which is a big negative, even though 760 is a good score, it was not good enough for our system",
+      "The loan term was marked down by -1.84, which is like wanting to pay for a small thing over a very long time",
+      "Your loan amount of Rs.10,000 is very small compared to your income of Rs.500,000, but our system still said no"
+    ],
+    "next_steps": [
+      "Check your CIBIL report to see if there are any mistakes that can be fixed to improve your score",
+      "Consider a shorter loan term, like paying for something in a few months instead of many years",
+      "You could also try to borrow a bit more money to make it worth our while to say yes"
+    ],
+    "voice_summary": "Your loan was rejected, but you can try again in 6 months with a better CIBIL score and loan term"
+  },
+  {
+    "type": "loan",
+    "inputs": {
+      "cibil_score": 780,
+      "income": 500000.0,
+      "loan_amount": 100000.0,
+      "education": "Graduate",
+      "self_employed": "No",
+      "loan_term": 12,
+      "dependents": 0
+    },
+    "prediction": "Approved",
+    "confidence": 95.1,
+    "reasons": [
+      "Your CIBIL score of 780 was much higher than the average, which made a big positive difference in the decision.",
+      "Your annual income of Rs.500,000 was high enough to show you can pay back the loan of Rs.100,000 easily.",
+      "You didn't have too many expensive assets, which meant you're not overspending and can afford the loan."
+    ],
+    "next_steps": [
+      "Now, you need to sign the loan documents and return them to the lender to get the money.",
+      "Make sure to pay your loan installments on time, every time, to keep your CIBIL score high.",
+      "Keep your income stable and don't take on too much debt, so you can easily pay back the loan."
+    ],
+    "voice_summary": "Your loan application has been approved, please proceed with the documentation."
+  },
+  {
+    "type": "loan",
+    "inputs": {
+      "cibil_score": 780,
+      "income": 500000.0,
+      "loan_amount": 100000.0,
+      "education": "Graduate",
+      "self_employed": "No",
+      "loan_term": 13,
+      "dependents": 0
+    },
+    "prediction": "Approved",
+    "confidence": 99.9,
+    "reasons": [
+      "Your high CIBIL score of 780 was a major reason for approval, it's like scoring 98% in a test",
+      "Your annual income of Rs.500,000 also helped, it's like having a part-time job that pays well",
+      "Your loan amount of Rs.100,000 was manageable, like borrowing a small amount from a friend"
+    ],
+    "next_steps": [
+      "Now, submit all the required documents to get the loan amount, like turning in your homework on time",
+      "Make sure to pay your loan installments on time, like paying your school fees regularly",
+      "Keep your credit history clean, like keeping your school record clean"
+    ],
+    "voice_summary": "Your loan application has been approved, proceed with documentation now"
+  }
+]
