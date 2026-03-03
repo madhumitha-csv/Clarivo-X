@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ClarivoX — Explainable Banking AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="index.css"/>
+</head>
+<body>
+
+<div class="orb o1"></div>
+<div class="orb o2"></div>
+<div class="orb o3"></div>
+
+<!-- TOPBAR -->
+<div id="topbar" style="display:none">
+  <div class="fac gap10">
+    <button class="back-btn" id="backBtn" onclick="goBack()">← Back</button>
+    <div class="tb-logo" onclick="goTo('home')">ClarivoX</div>
+  </div>
+  <div class="step-bar" id="stepBar"></div>
+  <div class="tb-right">
+    <!-- Language switcher in topbar -->
+    <div class="tb-lang" id="tbLangBar">
+      <button class="tb-lang-btn active" onclick="switchLang('English',this)">EN</button>
+      <button class="tb-lang-btn" onclick="switchLang('Tamil',this)">TA</button>
+      <button class="tb-lang-btn" onclick="switchLang('Hindi',this)">HI</button>
+      <button class="tb-lang-btn" onclick="switchLang('Malayalam',this)">ML</button>
+    </div>
+    <button class="tb-nav-link" data-label="nav_home" onclick="goTo('home')">Home</button>
+    <button class="tb-nav-link" data-label="nav_chat" onclick="goTo('chat')">AI Chat</button>
+    <button class="tb-nav-link" data-label="nav_churn" onclick="goTo('churn')">Churn</button>
+    <div class="profile-pill" onclick="togglePP()">
+      <div class="pav" id="tav">U</div>
+      <div><div class="pname" id="tpname">User</div><div class="pmode" id="tpmode">—</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE POPUP -->
+<div id="ppopup">
+  <div class="pp-head">
+    <div class="pav" style="width:40px;height:40px;font-size:17px;margin-bottom:8px" id="ppav">U</div>
+    <div class="pp-name" id="ppname">User</div>
+    <div class="pp-email" id="ppemail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="deabadbbac9ebdb2bfacb7a8b1a6f0bfb7">[email&#160;protected]</a></div>
+  </div>
+  <div class="pp-item" onclick="goTo('profile');togglePP()">👤 <span data-label="pp_profile">Switch Profile</span></div>
+  <div class="pp-item" onclick="goTo('chat');togglePP()">💬 <span data-label="nav_chat">AI Chat</span></div>
+  <div class="pp-item" onclick="goTo('feedback');togglePP()">⭐ <span data-label="pp_feedback">Feedback</span></div>
+  <div class="pp-item" onclick="goTo('splash');togglePP()" style="color:var(--danger)">🚪 <span data-label="pp_signout">Sign Out</span></div>
+</div>
+
+<!-- FLOATING CHAT -->
+<button id="floatChat" onclick="toggleCP()" title="Ask ClarivoX AI">💬<div class="fcbadge">1</div></button>
+
+<!-- CHAT PANEL -->
+<div id="cpanel">
+  <div class="cp-hd">
+    <div class="cp-title">✨ ClarivoX Assistant</div>
+    <button class="cp-x" onclick="toggleCP()">×</button>
+  </div>
+  <div class="cp-msgs" id="cpmsgs">
+    <div class="bubble ai"><div class="aitag">CLARIVOX AI</div><span data-label="chat_welcome_short">Hi! Ask me anything about banking, loans, or your account.</span></div>
+  </div>
+  <div class="cp-bar">
+    <div class="cp-inp"><input type="text" class="form-control" id="cpinp" placeholder="Ask a question…" onkeydown="if(event.key==='Enter')cpSend()"/></div>
+    <button class="cp-send" onclick="cpSend()">➤</button>
+  </div>
+</div>
+
+<!-- ══════════ PAGES ══════════ -->
+
+<!-- SPLASH -->
+<div class="page active" id="splash">
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;position:relative;overflow:hidden">
+    <div class="spl-orb"></div>
+    <div class="spl-ring" style="width:700px;height:700px;opacity:.06"></div>
+    <div class="spl-ring" style="width:500px;height:500px;opacity:.09;animation-delay:-3s"></div>
+    <div class="spl-ring" style="width:330px;height:330px;opacity:.12;animation-delay:-6s"></div>
+    <div style="position:relative;z-index:2;text-align:center">
+      <div class="spl-logo">ClarivoX</div>
+      <div class="spl-tag">Banking AI That Explains Itself</div>
+      <div class="spl-sub">Transparent decisions · SHAP powered · For everyone</div>
+      <div class="spl-bar"><div class="spl-fill"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div class="page" id="login">
+  <div style="display:flex;align-items:center;justify-content:center;flex:1;position:relative;overflow:hidden">
+    <div class="spl-orb" style="opacity:.35"></div>
+    <div class="login-card">
+      <div class="login-logo">ClarivoX</div>
+      <p style="text-align:center;color:var(--text2);font-size:12px;margin-bottom:18px" data-label="login_tagline">Explainable AI for Loans, Churn & Banking</p>
+      <!-- Language picker -->
+      <div class="lang-row" id="loginLangRow">
+        <button class="lang-btn active" onclick="setLang(this,'English')">🇬🇧 English</button>
+        <button class="lang-btn" onclick="setLang(this,'Tamil')">🇮🇳 தமிழ்</button>
+        <button class="lang-btn" onclick="setLang(this,'Hindi')">🇮🇳 हिंदी</button>
+        <button class="lang-btn" onclick="setLang(this,'Malayalam')">🇮🇳 മലയാളം</button>
+      </div>
+      <div class="form-group">
+        <label class="form-label" data-label="username">Your Name</label>
+        <input type="text" class="form-control" id="lname" placeholder="Enter your name"/>
+      </div>
+      <button class="btn btn-primary btn-full mt12" data-label="enter_btn" onclick="doLogin()">Get Started →</button>
+      <div class="divider">or</div>
+      <button class="btn btn-secondary btn-full" data-label="guest_btn" onclick="doLoginGuest()">Continue as Guest</button>
+      <div style="margin-top:16px;text-align:center">
+        <span class="status-dot" id="loginDot"></span>
+        <span style="font-size:11px;color:var(--text3)" id="loginStatus">Checking backend…</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE SELECT -->
+<div class="page" id="profile">
+  <div class="pw">
+    <div class="c-lg">
+      <div class="tc mb24">
+        <span class="badge bp mb12" data-label="step1_badge">Step 1 of 3</span>
+        <div class="stitle" data-label="profile_title">Who are you?</div>
+        <div class="ssub" data-label="profile_sub">We'll personalise AI explanations to match your level</div>
+      </div>
+      <div class="g3">
+        <div class="pcard" onclick="selProfile('Elder',this)">
+          <span class="pico">👴</span>
+          <div class="pname" data-label="profile_elder">Elder Mode</div>
+          <div class="pdesc" data-label="profile_elder_desc">Simple language with real-world analogies. No jargon, just clarity.</div>
+          <button class="btn btn-ghost btn-sm w100" data-label="select_btn">Select →</button>
+        </div>
+        <div class="pcard" onclick="selProfile('Student',this)">
+          <span class="pico">🎓</span>
+          <div class="pname" data-label="profile_student">Student Mode</div>
+          <div class="pdesc" data-label="profile_student_desc">School analogies and beginner-friendly context.</div>
+          <button class="btn btn-ghost btn-sm w100" data-label="select_btn">Select →</button>
+        </div>
+        <div class="pcard" onclick="selProfile('Professional',this)">
+          <span class="pico">💼</span>
+          <div class="pname" data-label="profile_professional">Professional Mode</div>
+          <div class="pdesc" data-label="profile_professional_desc">Financial terms, SHAP values, and data-driven insights.</div>
+          <button class="btn btn-ghost btn-sm w100" data-label="select_btn">Select →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="page" id="home">
+  <div class="hero" style="position:relative">
+    <div class="spl-orb" style="opacity:.22;position:absolute;top:-220px;left:50%;transform:translateX(-50%)"></div>
+    <div style="position:relative;z-index:2">
+      <span class="badge bp mb12" id="hbadge">✨ Explainable Banking AI</span>
+      <h1 data-label="hero_title">Banking AI<br/>You Can Trust</h1>
+      <p data-label="hero_sub" id="htext">ClarivoX explains every AI banking decision in your language — loans, customer churn, credit scores — powered by SHAP and Groq AI.</p>
+      <div class="hero-btns">
+        <button class="btn btn-primary btn-lg" data-label="hero_btn1" onclick="goTo('usecase')">🚀 Check Loan AI</button>
+        <button class="btn btn-secondary btn-lg" data-label="hero_btn2" onclick="goTo('chat')">💬 Ask AI</button>
+        <button class="btn btn-ghost btn-lg" data-label="hero_btn3" onclick="goTo('churn')">📉 Churn Predictor</button>
+      </div>
+    </div>
+  </div>
+  <div class="feat-grid" id="featGrid">
+    <div class="fcard" onclick="goTo('usecase')"><div class="ficon">🏦</div><div class="ftitle" data-label="feat_loan_title">Loan Approval AI</div><div class="fdesc" data-label="feat_loan_desc">Understand why your loan was approved or rejected with full SHAP factor breakdown.</div><div class="farr" data-label="analyse_btn">Analyse →</div></div>
+    <div class="fcard" onclick="goTo('churn')"><div class="ficon">📉</div><div class="ftitle" data-label="feat_churn_title">Churn Predictor</div><div class="fdesc" data-label="feat_churn_desc">Predict if a customer will leave the bank and understand the risk factors clearly.</div><div class="farr" data-label="predict_btn">Predict →</div></div>
+    <div class="fcard" onclick="goTo('chat')"><div class="ficon">🤖</div><div class="ftitle" data-label="feat_chat_title">AI Banking Chat</div><div class="fdesc" data-label="feat_chat_desc">Ask anything about loans, EMI, credit scores, investments in your language.</div><div class="farr" data-label="ask_btn">Ask now →</div></div>
+    <div class="fcard" onclick="goTo('whatif')"><div class="ficon">🔧</div><div class="ftitle" data-label="feat_whatif_title">What-If Simulator</div><div class="fdesc" data-label="feat_whatif_desc">Change your profile values and see how loan approval probability changes live.</div><div class="farr" data-label="simulate_btn">Simulate →</div></div>
+    <div class="fcard" onclick="goTo('transparency')"><div class="ficon">🛡️</div><div class="ftitle" data-label="feat_trans_title">Transparency Report</div><div class="fdesc" data-label="feat_trans_desc">See how open, reliable and fair the AI banking decision was with bias metrics.</div><div class="farr" data-label="report_btn">View report →</div></div>
+    <div class="fcard" onclick="goTo('feedback')"><div class="ficon">⭐</div><div class="ftitle" data-label="feat_fb_title">Rate ClarivoX</div><div class="fdesc" data-label="feat_fb_desc">Help us improve by sharing your experience with the AI explanations.</div><div class="farr" data-label="feedback_btn">Give feedback →</div></div>
+  </div>
+</div>
+
+<!-- USE CASE -->
+<div class="page" id="usecase">
+  <div class="pw">
+    <div class="c-lg">
+      <div class="tc mb24">
+        <span class="badge bp mb12" data-label="step2_badge">Step 2 of 3</span>
+        <div class="stitle" data-label="usecase_title">What do you want to check?</div>
+        <div class="ssub" data-label="usecase_sub">Select a use case and get a personalised AI explanation</div>
+      </div>
+      <div class="g4">
+        <div class="uccard" onclick="selUC('Loans & EMI',this)"><div class="ucicon">🏦</div><div class="ucname" data-label="uc_loan">Loan & EMI</div><div class="ucdesc" data-label="uc_loan_desc">Ask about loans, interest rates, EMI calculations.</div><span class="badge bp">Financial</span></div>
+        <div class="uccard" onclick="selUC('Credit Score',this)"><div class="ucicon">📊</div><div class="ucname" data-label="uc_credit">Credit Score</div><div class="ucdesc" data-label="uc_credit_desc">Understand how to improve your CIBIL score.</div><span class="badge bs">Credit</span></div>
+        <div class="uccard" onclick="selUC('Savings & Investment',this)"><div class="ucicon">💰</div><div class="ucname" data-label="uc_savings">Savings & Investment</div><div class="ucdesc" data-label="uc_savings_desc">Learn about FD, RD, mutual funds and savings.</div><span class="badge bw">Investment</span></div>
+        <div class="uccard" onclick="selUC('Insurance',this)"><div class="ucicon">🛡️</div><div class="ucname" data-label="uc_insurance">Insurance</div><div class="ucdesc" data-label="uc_insurance_desc">Understand life, health, and vehicle insurance.</div><span class="badge bd">Insurance</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOAN FORM -->
+<div class="page" id="inputform">
+  <div class="pw">
+    <div class="c-md">
+      <div class="mb24">
+        <span class="badge bp mb12" data-label="step3_badge">Step 3 of 3</span>
+        <div class="stitle" data-label="loan_form_title">Enter Loan Details</div>
+        <div class="ssub" data-label="loan_form_sub">Fill in your details for an accurate AI loan assessment</div>
+      </div>
+      <div class="card">
+        <div class="g2">
+          <div class="form-group"><label class="form-label" data-label="label_income">Annual Income (₹)</label><input type="number" class="form-control" id="fIncome" placeholder="e.g. 500000"/></div>
+          <div class="form-group"><label class="form-label" data-label="label_loan_amt">Loan Amount (₹)</label><input type="number" class="form-control" id="fLoan" placeholder="e.g. 1000000"/></div>
+        </div>
+        <div class="g2">
+          <div class="form-group"><label class="form-label" data-label="label_cibil">CIBIL Score</label><input type="number" class="form-control" id="fCibil" placeholder="e.g. 750"/></div>
+          <div class="form-group"><label class="form-label" data-label="label_term">Loan Term (months)</label><input type="number" class="form-control" id="fTerm" placeholder="e.g. 12"/></div>
+        </div>
+        <div class="g2">
+          <div class="form-group"><label class="form-label" data-label="label_edu">Education</label>
+            <select class="form-control" id="fEdu"><option value="Graduate" data-label="opt_graduate">Graduate</option><option value="Not Graduate" data-label="opt_notgraduate">Not Graduate</option></select>
+          </div>
+          <div class="form-group"><label class="form-label" data-label="label_self">Self Employed?</label>
+            <select class="form-control" id="fSelf"><option value="No" data-label="opt_no">No</option><option value="Yes" data-label="opt_yes">Yes</option></select>
+          </div>
+        </div>
+        <div class="g2">
+          <div class="form-group"><label class="form-label" data-label="label_dep">Dependents</label><input type="number" class="form-control" id="fDep" placeholder="e.g. 0" value="0"/></div>
+          <div class="form-group"><label class="form-label" data-label="label_res">Residential Assets (₹)</label><input type="number" class="form-control" id="fRes" placeholder="e.g. 0" value="0"/></div>
+        </div>
+        <button class="btn btn-primary btn-full mt12" id="loanBtn" data-label="btn_check_loan" onclick="submitLoan()">🚀 Run AI Assessment</button>
+        <p style="text-align:center;font-size:10px;color:var(--text3);margin-top:10px" data-label="privacy_note">🔒 Your data is processed locally and never stored</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AI RESULT -->
+<div class="page" id="airesult" style="align-items:center;justify-content:center">
+  <div style="max-width:520px;width:100%;text-align:center;padding:80px 20px">
+    <span class="badge" id="rBadge" style="justify-content:center">⚡ AI Decision Complete</span>
+    <div style="font-size:12px;color:var(--text3);margin-top:8px" id="rModelSub">Loan Approval Assessment · LightGBM + SHAP</div>
+    <div class="res-big" id="rVerdict" style="color:var(--success)">Approved</div>
+    <div class="fjb mb8"><span style="font-size:12px;color:var(--text2)" data-label="confidence">Model Confidence</span><span style="font-weight:700;color:var(--indigo)" id="rConf">—%</span></div>
+    <div class="cbar-t"><div class="cbar-f" id="rBar"></div></div>
+    <div class="rstats">
+      <div class="rstat"><div class="rstat-v" id="rRisk">—</div><div class="rstat-l" data-label="risk_level">Risk Level</div></div>
+      <div class="rstat"><div class="rstat-v">LightGBM</div><div class="rstat-l">Model</div></div>
+      <div class="rstat"><div class="rstat-v" id="rScore">—</div><div class="rstat-l">SHAP Score</div></div>
+    </div>
+    <div id="rAlert" style="border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:9px;margin-bottom:22px"></div>
+    <!-- Voice result button -->
+    <div style="margin-bottom:16px">
+      <button class="btn btn-ghost btn-sm" id="voiceResultBtn" onclick="speakResult()" style="gap:8px">
+        🔊 <span data-label="listen_result">Listen to Result</span>
+      </button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:9px">
+      <button class="btn btn-primary btn-full" data-label="view_explanation" onclick="goTo('explanation')">🔍 View Full Explanation →</button>
+      <button class="btn btn-secondary btn-full" data-label="whatif_btn" onclick="goTo('whatif')">🔧 What-If Simulator</button>
+      <button class="btn btn-ghost btn-full" data-label="trans_btn" onclick="goTo('transparency')">🛡️ Transparency Report</button>
+    </div>
+  </div>
+</div>
+
+<!-- EXPLANATION -->
+<div class="page" id="explanation">
+  <div class="pw">
+    <div class="c-lg">
+      <div class="mb24">
+        <div class="stitle" data-label="expl_title">Why was this decision made?</div>
+        <div class="ssub" data-label="expl_sub">Top SHAP factors that influenced the AI's outcome, personalised for your profile</div>
+      </div>
+      <div class="g2" id="explGrid" style="align-items:start">
+        <div>
+          <div id="shapFactors"></div>
+          <div class="eacts mt16 mb16">
+            <button class="btn btn-ghost btn-sm" data-label="simplify_btn" onclick="simplifyExpl()">🧓 Simplify</button>
+            <button class="btn btn-ghost btn-sm" data-label="ask_ai_btn" onclick="goTo('chat')">💬 Ask AI</button>
+          </div>
+          <!-- REJECTION REASONS + NEXT STEPS (shown only when rejected) -->
+          <div id="rejectionPanel" style="display:none;margin-bottom:16px">
+            <div class="card" style="border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.05);margin-bottom:12px">
+              <div style="font-size:11px;font-weight:700;color:#F87171;letter-spacing:.5px;margin-bottom:10px" id="rejTitleEl">❌ Why Was It Rejected?</div>
+              <div id="rejReasonsList"></div>
+            </div>
+            <div class="card" style="border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.04);margin-bottom:12px">
+              <div style="font-size:11px;font-weight:700;color:#34D399;letter-spacing:.5px;margin-bottom:10px" id="nextStepsTitleEl">✅ What To Do Next</div>
+              <div id="nextStepsList"></div>
+            </div>
+            <div class="card" style="background:rgba(124,110,250,.06);margin-bottom:12px" id="reapplyCard">
+              <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin-bottom:6px" id="reapplyLabelEl">📅 When To Reapply</div>
+              <p style="font-size:12px;color:var(--text2)" id="reapplyTxt"></p>
+            </div>
+            <div class="card" style="background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.3)">
+              <div style="font-size:10px;font-weight:700;color:var(--warning);letter-spacing:.5px;margin-bottom:6px" id="improveTipLabelEl">💡 Top Improvement Tip</div>
+              <p style="font-size:12px;color:var(--text2)" id="improveTipTxt"></p>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button class="btn btn-primary btn-full" data-label="whatif_btn2" onclick="goTo('whatif')">🔧 What-If Simulator →</button>
+            <button class="btn btn-secondary btn-full" data-label="trans_btn2" onclick="goTo('transparency')">🛡️ Transparency Report →</button>
+          </div>
+        </div>
+        <div>
+          <div class="ebox mb16" id="ebox">
+            <div class="emode" id="emode">👤 Personalised Explanation</div>
+            <p id="etxt">Loading AI explanation…</p>
+          </div>
+          <div class="card">
+            <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin-bottom:12px" data-label="shap_weights">SHAP FACTOR WEIGHTS</div>
+            <div id="shapBars"></div>
+          </div>
+          <div class="card mt16" style="margin-top:16px;background:rgba(124,110,250,.05)">
+            <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin-bottom:8px" data-label="analogy_label">💡 ANALOGY</div>
+            <p style="font-size:12px;color:var(--text2);line-height:1.7" id="analogyTxt">Loading…</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT-IF SIMULATOR -->
+<div class="page" id="whatif">
+  <div class="pw">
+    <div class="c-lg">
+      <div class="mb24">
+        <div class="stitle" data-label="whatif_title">What-If Simulator</div>
+        <div class="ssub" data-label="whatif_sub">Adjust sliders to see how changes affect loan approval probability in real time</div>
+      </div>
+      <div class="g2" id="wiGrid" style="align-items:start">
+        <div class="card">
+          <div class="slg"><div class="sll"><span data-label="sim_income">💰 Annual Income (₹)</span><span id="iv">5,00,000</span></div><input type="range" min="100000" max="2000000" step="10000" value="500000" id="is" oninput="updateSim()"/></div>
+          <div class="slg"><div class="sll"><span data-label="sim_cibil">📊 CIBIL Score</span><span id="cv">700</span></div><input type="range" min="300" max="900" step="10" value="700" id="cs" oninput="updateSim()"/></div>
+          <div class="slg"><div class="sll"><span data-label="sim_loan">🏠 Loan Amount (₹)</span><span id="lv">10,00,000</span></div><input type="range" min="100000" max="10000000" step="50000" value="1000000" id="ls" oninput="updateSim()"/></div>
+          <div class="simtip" id="simtip">💡 Raise CIBIL score above 750 for the biggest improvement.</div>
+        </div>
+        <div class="card tc">
+          <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px" data-label="approval_prob">APPROVAL PROBABILITY</div>
+          <div class="prob-big" id="pd">65%</div>
+          <div id="pl" style="font-size:13px;font-weight:600;margin-bottom:22px">✅ Likely Approved</div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:20px">
+            <button class="btn btn-primary btn-full" data-label="run_assessment" onclick="goTo('inputform')">🚀 Run Real Assessment →</button>
+            <button class="btn btn-secondary btn-full" data-label="ask_ai_btn" onclick="goTo('chat')">💬 Ask AI →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHURN PREDICTOR -->
+<div class="page" id="churn">
+  <div class="pw">
+    <div class="c-md">
+      <div class="mb24">
+        <div class="stitle" data-label="churn_check">Customer Churn Predictor</div>
+        <div class="ssub" data-label="churn_sub">Predict if a customer will leave the bank — powered by Random Forest + SHAP</div>
+      </div>
+      <div class="card">
+        <div class="g2">
+          <div class="form-group"><label class="form-label" data-label="label_tenure">Tenure (years)</label><input type="number" class="form-control" id="cTenure" placeholder="e.g. 3"/></div>
+          <div class="form-group"><label class="form-label" data-label="label_balance">Account Balance (₹)</label><input type="number" class="form-control" id="cBalance" placeholder="e.g. 50000"/></div>
+        </div>
+        <div class="g2">
+          <div class="form-group"><label class="form-label" data-label="label_products">No. of Products</label><input type="number" class="form-control" id="cProducts" placeholder="e.g. 1" value="1"/></div>
+          <div class="form-group"><label class="form-label" data-label="label_sat">Satisfaction Score (1-5)</label><input type="number" class="form-control" id="cSatis" placeholder="e.g. 3" min="1" max="5"/></div>
+        </div>
+        <div class="g2">
+          <div class="form-group"><label class="form-label" data-label="label_complaints">Number of Complaints</label><input type="number" class="form-control" id="cComplaints" placeholder="e.g. 0" value="0"/></div>
+          <div class="form-group"><label class="form-label" data-label="label_credit">Credit Score</label><input type="number" class="form-control" id="cCredit" placeholder="e.g. 650"/></div>
+        </div>
+        <div class="g2">
+          <div class="form-group"><label class="form-label" data-label="label_age">Age</label><input type="number" class="form-control" id="cAge" placeholder="e.g. 35"/></div>
+          <div class="form-group"><label class="form-label" data-label="label_active">Is Active Member?</label>
+            <select class="form-control" id="cActive"><option value="true" data-label="opt_yes">Yes</option><option value="false" data-label="opt_no">No</option></select>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-full mt12" id="churnBtn" data-label="btn_check_churn" onclick="submitChurn()">📉 Predict Churn Risk</button>
+      </div>
+      <div class="card mt16" id="churnResult" style="display:none;margin-top:16px">
+        <div class="tc mb16">
+          <div id="churnVerdict" style="font-family:'Sora',sans-serif;font-size:28px;font-weight:800;margin-bottom:8px"></div>
+          <div style="font-size:12px;color:var(--text2)" data-label="churn_risk">Risk Score</div>
+          <div style="font-family:'Sora',sans-serif;font-size:48px;font-weight:800;background:linear-gradient(135deg,var(--indigo),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent" id="churnScore"></div>
+          <div class="cbar-t"><div class="cbar-f" id="churnBar"></div></div>
+          <!-- Speak churn result -->
+          <button class="btn btn-ghost btn-sm mt12" onclick="speakChurnResult()" style="margin-top:12px">🔊 <span data-label="listen_result">Listen to Result</span></button>
+        </div>
+        <div id="churnExpPoints"></div>
+        <div class="card mt12" style="margin-top:12px;background:rgba(124,110,250,.05)">
+          <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:6px" data-label="analogy_label">💡 ANALOGY</div>
+          <p style="font-size:12px;color:var(--text2);line-height:1.7" id="churnAnalogy"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AI CHAT -->
+<div class="page" id="chat">
+  <div class="pw">
+    <div class="c-md">
+      <div class="mb16">
+        <div class="stitle" data-label="chat_title">Ask ClarivoX AI</div>
+        <div class="ssub" data-label="chat_sub">Get plain-language answers about banking in your language</div>
+      </div>
+      <!-- Voice mode toggle -->
+      <div class="fac gap10 mb16" style="justify-content:space-between;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:8px">
+          <button id="voiceModeBtn" onclick="toggleVoiceMode()" title="Enable Voice Conversation Mode"
+            style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:50px;border:1.5px solid rgba(124,110,250,0.4);background:rgba(124,110,250,0.08);color:var(--indigo);font-size:12px;font-weight:600;cursor:pointer;transition:var(--tr)">
+            🎙️ <span id="voiceModeLbl">Voice Mode: Off</span>
+          </button>
+          <span style="font-size:10px;color:var(--text3)">AI will speak responses automatically</span>
+        </div>
+      </div>
+      <div class="fac gap10 mb16" style="flex-wrap:wrap">
+        <select class="form-control" id="chatTopic" style="width:auto;flex:1">
+          <option value="Loans & EMI" data-label="topic_loan">🏦 Loans & EMI</option>
+          <option value="Credit Score" data-label="topic_credit">📊 Credit Score</option>
+          <option value="Savings & Investment" data-label="topic_savings">💰 Savings</option>
+          <option value="Insurance" data-label="topic_insurance">🛡️ Insurance</option>
+        </select>
+        <select class="form-control" id="chatLang" style="width:auto;flex:1" onchange="updateChatLang()">
+          <option value="English">🇬🇧 English</option>
+          <option value="Tamil">🇮🇳 Tamil</option>
+          <option value="Hindi">🇮🇳 Hindi</option>
+          <option value="Malayalam">🇮🇳 Malayalam — മലയാളം</option>
+        </select>
+      </div>
+      <!-- Voice indicator -->
+      <div class="voice-indicator" id="voiceIndicator">
+        <div class="vdot"></div><div class="vdot"></div><div class="vdot"></div>
+        <span id="voiceStatus">Listening…</span>
+      </div>
+      <div class="qchips" id="chatQChips">
+        <div class="qchip" onclick="qAsk('What is EMI and how is it calculated?')" data-label="fq1">What is EMI?</div>
+        <div class="qchip" onclick="qAsk('How can I improve my CIBIL score?')" data-label="fq2">Improve CIBIL score</div>
+        <div class="qchip" onclick="qAsk('Should I take a home loan?')" data-label="fq3">Should I take a loan?</div>
+        <div class="qchip" onclick="qAsk('What is the difference between FD and RD?')">FD vs RD</div>
+        <div class="qchip" onclick="qAsk('How does loan rejection affect credit score?')">Loan rejection impact</div>
+      </div>
+      <div class="chat-win">
+        <div class="chat-msgs" id="chatMsgs">
+          <div class="bubble ai"><div class="aitag">✨ CLARIVOX AI</div><span data-label="chat_welcome">Hello! I'm here to explain banking decisions in simple terms. Ask me anything!</span></div>
+        </div>
+        <div class="chat-bar">
+          <!-- Mic button -->
+          <button class="voice-btn" id="micBtn" onclick="toggleVoiceInput()" title="Speak your question">🎤</button>
+          <div class="chat-inp"><input type="text" class="form-control" id="chatInp" data-placeholder-label="chat_placeholder" placeholder="Ask a banking question…" onkeydown="if(event.key==='Enter')sendChat()"/></div>
+          <button class="btn btn-primary btn-sm" data-label="send_btn" onclick="sendChat()" id="chatSendBtn">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TRANSPARENCY -->
+<div class="page" id="transparency">
+  <div class="pw">
+    <div class="c-lg">
+      <div class="mb24">
+        <div class="stitle" data-label="trans_title">Transparency & Bias Report</div>
+        <div class="ssub" data-label="trans_sub">How open, reliable, and fair was this AI decision?</div>
+      </div>
+      <div class="g2" id="trGrid" style="align-items:start">
+        <div>
+          <div class="card tc mb16" style="margin-bottom:16px">
+            <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin-bottom:12px" data-label="trans_score_label">TRANSPARENCY SCORE</div>
+            <div style="position:relative;width:120px;height:120px;margin:0 auto 18px">
+              <svg width="120" height="120" style="transform:rotate(-90deg)">
+                <defs><linearGradient id="cg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#7C6EFA"/><stop offset="100%" stop-color="#A855F7"/></linearGradient></defs>
+                <circle cx="60" cy="60" r="48" fill="none" stroke="var(--bg3)" stroke-width="9"/>
+                <circle cx="60" cy="60" r="48" fill="none" stroke="url(#cg)" stroke-width="9" stroke-linecap="round" stroke-dasharray="301" stroke-dashoffset="54" id="trCircle"/>
+              </svg>
+              <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">
+                <div style="font-family:'Sora',sans-serif;font-size:24px;font-weight:800" id="trScore">82</div>
+                <div style="font-size:9px;color:var(--text3)">/100</div>
+              </div>
+            </div>
+            <span class="badge bs" data-label="trans_good">✓ Good Transparency</span>
+          </div>
+          <div class="card">
+            <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin-bottom:12px" data-label="score_breakdown">SCORE BREAKDOWN</div>
+            <div class="mrow"><div class="mname" data-label="model_conf">Model Confidence</div><div class="mtrack"><div class="mfill" style="width:78%"></div></div><div class="mval">78%</div></div>
+            <div class="mrow"><div class="mname" data-label="shap_stability">SHAP Stability</div><div class="mtrack"><div class="mfill" style="width:86%"></div></div><div class="mval">86%</div></div>
+            <div class="mrow"><div class="mname" data-label="bias_check">Bias Check</div><div class="mtrack"><div class="mfill" style="width:64%;background:linear-gradient(90deg,var(--warning),#F97316)"></div></div><div class="mval" style="color:var(--warning)">64%</div></div>
+            <div class="mrow"><div class="mname" data-label="explainability">Explainability</div><div class="mtrack"><div class="mfill" style="width:90%"></div></div><div class="mval">90%</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="card mb16" style="background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.2);margin-bottom:16px">
+            <div class="fjb mb12" style="margin-bottom:12px">
+              <span style="font-weight:700;font-size:16px" data-label="bias_detection">⚖️ Bias Detection</span>
+              <span class="badge bw" data-label="potential_bias">⚠️ Potential Bias</span>
+            </div>
+            <p style="font-size:12px;color:var(--text2);margin-bottom:12px" data-label="bias_desc">A disparity was found in urban vs rural approval rates in the training data.</p>
+            <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:14px">
+              <div style="flex:1;min-width:100px;background:var(--bg2);border-radius:10px;padding:14px;text-align:center;border:1px solid var(--border)">
+                <div style="font-size:20px;margin-bottom:5px">🏙️</div>
+                <div style="font-family:'Sora',sans-serif;font-size:26px;font-weight:800;color:var(--indigo)">72%</div>
+                <div style="font-size:10px;color:var(--text3);margin-top:4px" data-label="urban_approval">Urban Approval</div>
+              </div>
+              <div style="flex:1;min-width:100px;background:var(--bg2);border-radius:10px;padding:14px;text-align:center;border:1px solid var(--border)">
+                <div style="font-size:20px;margin-bottom:5px">🌾</div>
+                <div style="font-family:'Sora',sans-serif;font-size:26px;font-weight:800;color:var(--warning)">39%</div>
+                <div style="font-size:10px;color:var(--text3);margin-top:4px" data-label="rural_approval">Rural Approval</div>
+              </div>
+            </div>
+          </div>
+          <div class="card mb16" style="margin-bottom:16px">
+            <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;margin-bottom:12px" data-label="model_info">MODEL INFO</div>
+            <div class="mrow"><div class="mname">Loan Model</div><div class="mtrack"><div class="mfill" style="width:92%"></div></div><div class="mval">LightGBM</div></div>
+            <div class="mrow"><div class="mname">Churn Model</div><div class="mtrack"><div class="mfill" style="width:86%"></div></div><div class="mval">RandForest</div></div>
+            <div class="mrow"><div class="mname">AI Engine</div><div class="mtrack"><div class="mfill" style="width:100%"></div></div><div class="mval">Groq</div></div>
+            <div class="mrow"><div class="mname">Explainability</div><div class="mtrack"><div class="mfill" style="width:90%"></div></div><div class="mval">SHAP</div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button class="btn btn-primary btn-full" data-label="ask_ai_btn" onclick="goTo('chat')">💬 Ask AI About This →</button>
+            <button class="btn btn-ghost btn-full" data-label="feedback_btn" onclick="goTo('feedback')">⭐ Rate This →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEEDBACK -->
+<div class="page" id="feedback" style="align-items:center;justify-content:center">
+  <div style="max-width:460px;width:100%;padding:80px 20px;text-align:center">
+    <div id="fbForm">
+      <span class="badge bp mb12" data-label="rate_badge">⭐ Rate ClarivoX</span>
+      <div class="stitle mt8" style="margin-top:8px" data-label="fb_title">How helpful was the AI?</div>
+      <div class="ssub" data-label="fb_sub">Your feedback helps us improve for everyone</div>
+      <div class="stars mt24" style="margin-top:24px">
+        <div class="star" onclick="rateStar(1)">⭐</div>
+        <div class="star" onclick="rateStar(2)">⭐</div>
+        <div class="star" onclick="rateStar(3)">⭐</div>
+        <div class="star" onclick="rateStar(4)">⭐</div>
+        <div class="star" onclick="rateStar(5)">⭐</div>
+      </div>
+      <div class="form-group"><textarea class="form-control" id="fbComment" rows="3" data-placeholder-label="fb_placeholder" placeholder="Tell us what you liked or what we can improve…"></textarea></div>
+      <button class="btn btn-primary btn-full" data-label="submit_fb" onclick="submitFB()">Submit Feedback →</button>
+    </div>
+    <div id="fbOk" style="display:none">
+      <div style="font-size:64px;margin-bottom:16px">🎉</div>
+      <div style="font-family:'Sora',sans-serif;font-size:48px;font-weight:800;color:var(--success);margin:10px 0" id="fbPct">100%</div>
+      <div style="font-size:16px;font-weight:700;margin-bottom:8px" data-label="fb_thanks">Thank you!</div>
+      <div style="color:var(--text2);font-size:13px;margin-bottom:24px" data-label="fb_submitted">Your feedback has been submitted to our team.</div>
+      <button class="btn btn-primary btn-full" data-label="back_home" onclick="goTo('home')">← Back to Home</button>
+    </div>
+  </div>
+</div>
+
+<script src="index.js"></script>
+</body>
+</html>
